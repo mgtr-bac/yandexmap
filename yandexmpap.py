@@ -45,6 +45,37 @@ class MapApp(QWidget):
                 self.zoom -= 1
                 self.update_map()
 
+        step = 180 / pow(2, self.zoom) * 2
+
+        moved = False
+        if event.key() == Qt.Key_Up:
+            self.lat += step
+            moved = True
+        elif event.key() == Qt.Key_Down:
+            self.lat -= step
+            moved = True
+        elif event.key() == Qt.Key_Left:
+            self.lon -= step
+            moved = True
+        elif event.key() == Qt.Key_Right:
+            self.lon += step
+            moved = True
+
+        if moved:
+            self.check_borders()
+            self.update_map()
+
+    def check_borders(self):
+        if self.lat > 85:
+            self.lat = 85
+        elif self.lat < -85:
+            self.lat = -85
+
+        if self.lon > 180:
+            self.lon -= 360
+        elif self.lon < -180:
+            self.lon += 360
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
